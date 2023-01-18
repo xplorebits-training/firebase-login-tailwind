@@ -42,6 +42,7 @@
             id="page-signin-input-email"
             data-testid="page-signin-input-email"
             name="email"
+            type="email"
             v-model="values.email"
             class="w-full border border-black rounded-md p-2"
           >
@@ -56,6 +57,7 @@
             id="page-signin-input-password"
             data-testid="page-signin-input-password"
             name="password"
+            type="password"
             v-model="values.password"
             class="w-full border border-black rounded-md p-2"
           >
