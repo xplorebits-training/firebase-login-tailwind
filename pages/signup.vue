@@ -1,6 +1,9 @@
 <template>
   <div>
     <h3 class="text-2xl text-center">Sign Up</h3>
+
+    <div> {{ values }} </div>
+
     <form class="mt-6 space-y-4" @click.prevent="">
       <div class="grid grid-cols-12 gap-3">
         <div class="col-span-12 md:col-span-6">
@@ -39,6 +42,7 @@
             id="page-signin-input-email"
             data-testid="page-signin-input-email"
             name="email"
+            v-model="values.email"
             class="w-full border border-black rounded-md p-2"
           >
         </div>
@@ -52,6 +56,7 @@
             id="page-signin-input-password"
             data-testid="page-signin-input-password"
             name="password"
+            v-model="values.password"
             class="w-full border border-black rounded-md p-2"
           >
         </div>
@@ -60,7 +65,7 @@
       <div class="h-2" />
 
       <!-- Submit button -->
-      <button type="submit" class="bg-indigo-500 w-full py-4 text-white rounded-lg hover:bg-indigo-700 uppercase">
+      <button type="submit" @click="onClickCreateUser" class="bg-indigo-500 w-full py-4 text-white rounded-lg hover:bg-indigo-700 uppercase">
         Submit
       </button>
 
@@ -72,11 +77,51 @@
 </template>
 
 <script setup>
+
+import { getAuth,createUserWithEmailAndPassword } from 'firebase/auth'
+import { useForm } from 'vee-validate'
+import * as yup from 'yup'
+
 definePageMeta({
   layout: 'register'
 })
 
-const onClickGotoSignIn = function () {
+const onClickGotoSignup = function () {
   useRouter().push({ path: '/signin' })
 }
+
+const schema = {
+  email: yup.string().email().required(),
+  password: yup.string().min(6).required()
+}
+
+const { values } = useForm({
+  validationSchema: schema,
+  initialValues: {
+    email: '',
+    password: ''
+  }
+
+})
+
+const onClickCreateUser = function() {
+  const auth = getAuth();
+  createUserWithEmailAndPassword(auth, values.email, values.password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    useRouter().replace({ path: '/' });
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // ..
+  });
+}
+
+onMounted(() => {
+  console.log(getAuth())
+})
+
+
 </script>
