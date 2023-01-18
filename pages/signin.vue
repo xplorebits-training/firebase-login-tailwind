@@ -47,6 +47,7 @@
 </template>
 
 <script setup>
+import { getAuth } from 'firebase/auth'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 
@@ -74,4 +75,8 @@ const { values } = useForm({
 const onSubmit = function () {
   console.log(values)
 }
+
+onMounted(() => {
+  console.log(getAuth())
+})
 </script>
