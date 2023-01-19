@@ -1,9 +1,6 @@
 <template>
   <div>
     <h3 class="text-2xl text-center">Sign Up</h3>
-
-    <div> {{ values }} </div>
-
     <form class="mt-6 space-y-4" @click.prevent="">
       <div class="grid grid-cols-12 gap-3">
         <div class="col-span-12 md:col-span-6">
@@ -12,6 +9,7 @@
             <div class="mt-1">
               <input
                 id="page-signin-input-firstName"
+                v-model="values.firstName"
                 data-testid="page-signin-input-firstName"
                 name="firstName"
                 class="w-full border border-black rounded-md p-2"
@@ -25,6 +23,7 @@
             <div class="mt-1">
               <input
                 id="page-signin-input-lastName"
+                v-model="values.lastName"
                 data-testid="page-signin-input-lastName"
                 name="lastName"
                 class="w-full border border-black rounded-md p-2"
@@ -40,10 +39,10 @@
         <div class="mt-1">
           <input
             id="page-signin-input-email"
+            v-model="values.email"
             data-testid="page-signin-input-email"
             name="email"
             type="email"
-            v-model="values.email"
             class="w-full border border-black rounded-md p-2"
           >
         </div>
@@ -55,10 +54,25 @@
         <div class="mt-1">
           <input
             id="page-signin-input-password"
+            v-model="values.password"
             data-testid="page-signin-input-password"
             name="password"
             type="password"
-            v-model="values.password"
+            class="w-full border border-black rounded-md p-2"
+          >
+        </div>
+      </div>
+
+      <!-- Confirm Password field -->
+      <div>
+        <label for="page-signin-input-confirm-password" class="text-sm text-gray-500">Confirm password</label>
+        <div class="mt-1">
+          <input
+            id="page-signin-input-confirm-password"
+            v-model="values.confirmPassword"
+            data-testid="page-signin-input-confirm-password"
+            name="confirmPassword"
+            type="password"
             class="w-full border border-black rounded-md p-2"
           >
         </div>
@@ -88,39 +102,47 @@ definePageMeta({
   layout: 'register'
 })
 
-const onClickGotoSignup = function () {
+const onClickGotoSignIn = function () {
   useRouter().push({ path: '/signin' })
 }
 
 const schema = {
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
   email: yup.string().email().required(),
-  password: yup.string().min(6).required()
+  password: yup.string().min(6).required(),
+  confirmPassword: yup.string().min(6).required()
 }
 
 const { values } = useForm({
   validationSchema: schema,
   initialValues: {
+    firstName: '',
+    lastName: '',
     email: '',
-    password: ''
-  }
-
+    password: '',
+    confirmPassword: ''
+  },
 })
 
 const onClickCreateUser = function() {
-  const auth = getAuth();
-  createUserWithEmailAndPassword(auth, values.email, values.password)
-  .then(() => {
-    useRouter().replace({ path: '/' });
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // ..
-  });
+
+  if(values.password === values.confirmPassword){
+
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, values.email, values.password)
+    .then(() => {
+      useRouter().replace({ path: '/' });
+    })
+    .catch((error) => {
+      alert(error.code);
+      alert(error.message);
+    })
+  }else{
+    alert("PASSWORD MISMATCH !");
+  }
 }
 
-onMounted(() => {
-  console.log(getAuth())
-})
+
 
 </script>
