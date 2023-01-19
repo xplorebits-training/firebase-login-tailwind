@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3 class="text-2xl text-center">Sign In</h3>
-    <form class="mt-6 space-y-4" @click.prevent="onSubmit">
+    <form class="mt-6 space-y-4" @submit.prevent="onClickCheckUser">
       <!-- Email field -->
       <div>
         <label for="page-signin-input-email" class="text-sm text-gray-500">Email</label>
@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { getAuth } from 'firebase/auth'
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
 
@@ -72,11 +72,15 @@ const { values } = useForm({
   }
 })
 
-const onSubmit = function () {
-  console.log(values)
+const onClickCheckUser = function() {
+  const auth = getAuth();
+  signInWithEmailAndPassword(auth, values.email, values.password)
+    .then(() => {
+      useRouter().push({ path: '/home' })
+    })
+    .catch((error) => {
+      alert(" ERROR CODE : " + error.code + "\n" + " ERROR MESSAGE : " + error.message );
+    });
 }
 
-onMounted(() => {
-  console.log(getAuth())
-})
 </script>
