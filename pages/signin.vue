@@ -67,8 +67,8 @@ const schema = {
 const { values } = useForm({
   validationSchema: schema,
   initialValues: {
-    email: 'tesruedc@gmail.com',
-    password: 'fdsa'
+    email: '',
+    password: ''
   }
 })
 
