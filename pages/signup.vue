@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3 class="text-2xl text-center">Sign Up</h3>
-    <form class="mt-6 space-y-4" @click.prevent="">
+    <form class="mt-6 space-y-4" @submit.prevent="onClickCreateUser">
       <div class="grid grid-cols-12 gap-3">
         <div class="col-span-12 md:col-span-6">
           <div>
@@ -81,7 +81,7 @@
       <div class="h-2" />
 
       <!-- Submit button -->
-      <button type="submit" @click="onClickCreateUser" class="bg-indigo-500 w-full py-4 text-white rounded-lg hover:bg-indigo-700 uppercase">
+      <button type="submit" class="bg-indigo-500 w-full py-4 text-white rounded-lg hover:bg-indigo-700 uppercase">
         Submit
       </button>
 
@@ -122,27 +122,22 @@ const { values } = useForm({
     email: '',
     password: '',
     confirmPassword: ''
-  },
+  }
 })
 
-const onClickCreateUser = function() {
-
+const onClickCreateUser = function () {
   if(values.password === values.confirmPassword){
-
     const auth = getAuth();
     createUserWithEmailAndPassword(auth, values.email, values.password)
     .then(() => {
       useRouter().replace({ path: '/' });
     })
     .catch((error) => {
-      alert(error.code);
-      alert(error.message);
+      alert("ERROR CODE : " + error.code + "\n" + "ERROR MESSAGE : " + error.message );
     })
   }else{
     alert("PASSWORD MISMATCH !");
   }
 }
-
-
 
 </script>
