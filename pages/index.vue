@@ -8,13 +8,6 @@
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-//onMounted(() => {
-//  setTimeout(() => {
-//   useRouter().replace({ path: '/home' })
-//  }, 2000)
-//})
-
-
 onMounted(() => {
   setTimeout(() => {
 
@@ -26,9 +19,7 @@ onMounted(() => {
         useRouter().replace({ path: '/signin' })
       }
     });
-
   }, 2000)
-
 })
 
 </script>

@@ -109,9 +109,7 @@ const { values } = useForm({
 const onClickCreateUser = function() {
   const auth = getAuth();
   createUserWithEmailAndPassword(auth, values.email, values.password)
-  .then((userCredential) => {
-    // Signed in 
-    const user = userCredential.user;
+  .then(() => {
     useRouter().replace({ path: '/' });
   })
   .catch((error) => {
@@ -124,6 +122,5 @@ const onClickCreateUser = function() {
 onMounted(() => {
   console.log(getAuth())
 })
-
 
 </script>
